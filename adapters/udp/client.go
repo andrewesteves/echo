@@ -1,4 +1,4 @@
-package tcp
+package udp
 
 import (
 	"bufio"
@@ -25,7 +25,7 @@ func (client *Client) Run() {
 			continue
 		}
 
-		conn, err := net.Dial("tcp", client.Addr)
+		conn, err := net.Dial("udp", client.Addr)
 		if err != nil {
 			log.Fatalf("Connection error: %s\n", err.Error())
 		}

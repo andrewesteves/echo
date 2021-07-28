@@ -1,4 +1,4 @@
-package tcp
+package udp
 
 import (
 	"bufio"
@@ -6,17 +6,17 @@ import (
 	"testing"
 )
 
-const addr = ":8090"
+const addr = ":9090"
 
 func init() {
 	server := &Server{Addr: addr}
 	go server.Run()
 }
 
-func TestTCPEchoServer(t *testing.T) {
+func TestUDPEchoServer(t *testing.T) {
 	payload := []byte("hello world\n")
 
-	conn, err := net.Dial("tcp", addr)
+	conn, err := net.Dial("udp", addr)
 	if err != nil {
 		t.Errorf("Connection error: %s", err.Error())
 	}

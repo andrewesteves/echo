@@ -20,7 +20,7 @@ func (server *Server) Run() {
 
 	defer listener.Close()
 
-	fmt.Printf("Running on: %s\n", server.Addr)
+	fmt.Printf("Running on %s\n", server.Addr)
 	for {
 		conn, err := listener.Accept()
 		if err != nil {

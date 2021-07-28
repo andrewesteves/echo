@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/andrewesteves/echo/adapters/tcp"
+	"github.com/andrewesteves/echo/adapters/udp"
 )
 
 var opt string
@@ -18,13 +19,21 @@ func init() {
 func Run() {
 	flag.Parse()
 
+	var addr = ":" + os.Getenv("ADDR")
+
 	switch opt {
 	case "tcp_server":
-		server := &tcp.Server{Addr: os.Getenv("ADDR")}
+		server := &tcp.Server{Addr: addr}
 		server.Run()
 	case "tcp_client":
-		client := &tcp.Client{Addr: os.Getenv("ADDR")}
+		client := &tcp.Client{Addr: addr}
 		client.Run()
+	case "udp_server":
+		server := &udp.Server{Addr: addr}
+		server.Run()
+	case "udp_client":
+		server := &udp.Client{Addr: addr}
+		server.Run()
 	default:
 		log.Fatal("Option not available")
 	}
