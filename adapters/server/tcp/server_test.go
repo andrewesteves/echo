@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-const addr = ":8090"
+const addr = "8090"
 
 func init() {
 	server := &Server{Addr: addr}
@@ -16,7 +16,7 @@ func init() {
 func TestTCPEchoServer(t *testing.T) {
 	payload := []byte("hello world\n")
 
-	conn, err := net.Dial("tcp", addr)
+	conn, err := net.Dial("tcp", ":"+addr)
 	if err != nil {
 		t.Errorf("Connection error: %s", err.Error())
 	}
@@ -34,5 +34,11 @@ func TestTCPEchoServer(t *testing.T) {
 	want := string(payload)
 	if got != want {
 		t.Errorf("Error: got %s but we want %s", got, want)
+	}
+}
+
+func TestTCPEchoServerInvalidSettings(t *testing.T) {
+	if NewServer("").Run() == nil {
+		t.Error("it should be an invalid server")
 	}
 }

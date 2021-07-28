@@ -1,9 +1,11 @@
 package tcp
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"net"
+
+	"github.com/andrewesteves/echo/adapters"
 )
 
 // Server TCP
@@ -11,11 +13,20 @@ type Server struct {
 	Addr string
 }
 
+// NewServer with settings
+func NewServer(addr string) adapters.App {
+	return &Server{Addr: addr}
+}
+
 // Run TCP
-func (server *Server) Run() {
-	listener, err := net.Listen("tcp", server.Addr)
+func (server *Server) Run() error {
+	if server.Addr == "" {
+		return errors.New("Address is required")
+	}
+
+	listener, err := net.Listen("tcp", ":"+server.Addr)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	defer listener.Close()

@@ -1,20 +1,39 @@
-package udp
+package client
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
-	"log"
 	"net"
 	"os"
+
+	"github.com/andrewesteves/echo/adapters"
 )
 
 // Client TCP
 type Client struct {
-	Addr string
+	Protocol string
+	Addr     string
+}
+
+// NewClient with settings
+func NewClient(protocol string, addr string) adapters.App {
+	return &Client{
+		Protocol: protocol,
+		Addr:     addr,
+	}
 }
 
 // Run client application
-func (client *Client) Run() {
+func (client *Client) Run() error {
+	if client.Protocol == "" {
+		return errors.New("Protocol is required")
+	}
+
+	if client.Addr == "" {
+		return errors.New("Address is required")
+	}
+
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
@@ -25,9 +44,9 @@ func (client *Client) Run() {
 			continue
 		}
 
-		conn, err := net.Dial("udp", client.Addr)
+		conn, err := net.Dial(client.Protocol, ":"+client.Addr)
 		if err != nil {
-			log.Fatalf("Connection error: %s\n", err.Error())
+			return fmt.Errorf("Connection error: %s", err.Error())
 		}
 
 		defer conn.Close()

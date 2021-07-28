@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-const addr = ":9090"
+const addr = "9090"
 
 func init() {
 	server := &Server{Addr: addr}
@@ -16,7 +16,7 @@ func init() {
 func TestUDPEchoServer(t *testing.T) {
 	payload := []byte("hello world\n")
 
-	conn, err := net.Dial("udp", addr)
+	conn, err := net.Dial("udp", ":"+addr)
 	if err != nil {
 		t.Errorf("Connection error: %s", err.Error())
 	}
@@ -34,5 +34,11 @@ func TestUDPEchoServer(t *testing.T) {
 	want := string(payload)
 	if got != want {
 		t.Errorf("Error: got %s but we want %s", got, want)
+	}
+}
+
+func TestUDPEchoServerInvalidSettings(t *testing.T) {
+	if NewServer("").Run() == nil {
+		t.Error("it should be an invalid server")
 	}
 }
